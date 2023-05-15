@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                template="/com/tech/arch/home/template.xhtml">
+
+    <h:head>
+        <h:outputStylesheet library="css" name="style.css"/>
+        <h:outputScript name="scripts/pfcrud.js"/>
+        <h:outputScript name="dynamsoft/Resources/js/DynamicWebTwainWithPluginjsf.js"/>
+        <h:outputScript name="dynamsoft/Resources/dynamsoft.webtwain.initiate.js"/>
+        <h:outputScript name="dynamsoft/Resources/dynamsoft.webtwain.config.js"/>
+    </h:head>
+
+    <ui:define name="title">
+        <h:outputText value="Advanced Search Form"/>
+    </ui:define>
+
+    <ui:define name="content">
+
+        <h:form id="frmScan" enctype="multipart/form-data">
+
+            <p:growl id="messages" showDetail="true" />
+
+            <p:outputLabel value="DropDown:" for="custTypeId" />
+            <p:selectOneMenu id="custTypeId" value="#{searchController.selectedCTID}"  filter="true" filterMatchMode="contains">
+                <f:ajax  event="change" listener="#{searchController.onModelChange}"  render="pggrid"  />        
+
+                <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                <f:selectItems value="#{searchController.authorizedTypes}"
+                               var="customTypeItem"
+                               itemValue="#{customTypeItem.customTypeId}"
+                               itemLabel="#{customTypeItem.customTypeDesc}"
+                               />
+            </p:selectOneMenu>
+
+            <br /> <br />
+
+            <p:commandButton action="#{searchController.search}" value="Search" update="docLst" process="@parent" icon="pi pi-refresh" oncomplete="PF('docTbl').clearFilters();"/>
+
+            <br /> <br />
+
+            <p:panelGrid id="pggrid" columns="3"  style="width: 100%">
+
+            </p:panelGrid> 
+
+            <br /> <br />
+
+            <p:dataTable id="docLst" var="docTable" value="#{searchController.genericBeanLst}" widgetVar="docTbl" filteredValue="#{searchController.filteredGenericBeanLst}"
+                         rows="10"
+                         paginator="true"
+                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">                    
+                <p:columns value="#{searchController.columns}" var="column" id="column_#{colIndex}" columnIndexVar="colIndex" sortBy="#{docTable[column.property]}" filterBy="#{docTable[column.property]}" filterMatchMode="contains">
+                    <f:facet name="header">
+                        <h:outputText value="#{column.header}" />
+                    </f:facet>
+                    <h:outputText value="#{docTable[column.property]}" />
+
+                    <p:column style="width:32px;text-align: center" rendered="#{colIndex == searchController.columns.size() -2}">
+                        <p:commandButton icon="ui-icon-document" title="View/Edit" actionListener="#{searchController.openDoc(docTable.prop1)}"/>
+                    </p:column>
+
+                    <p:column style="width:32px;text-align: center" rendered="#{colIndex == searchController.columns.size() -1}">
+                        <p:commandButton icon="ui-icon-trash"  value="#{iO_Bundle.Delete}" actionListener="#{searchController.deleteDoc(docTable.prop1)}" update=":frmScan:messages,frmScan:docLst"/>
+                    </p:column>
+                </p:columns>
+            </p:dataTable>
+
+
+
+            <br /> <br /><br /> <br /><br /> <br /><br /> <br />
+            <!-- Hide first 3 system columns in datatable -->
+            <p:ajaxStatus onsuccess="hideSystemCols();" />
+
+        </h:form>
+    </ui:define>
+</ui:composition>

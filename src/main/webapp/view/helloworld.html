@@ -1,0 +1,63 @@
+<html>
+<head>
+ <title>Hello World</title>
+</head>
+<body>
+<div id="dwtcontrolContainer"></div>
+<input type="button" value="Acquire" onclick="AcquireImage();" />
+<input type="button" value="RotateLeft" onclick="RotateLeft();" />
+<input type="button" value="RotateRight" onclick="RotateRight();" />
+
+<input type="button" value="Save" onclick="btn_SaveOnClick();" />
+<script type="text/javascript" src="Resources/dynamsoft.webtwain.initiate.js"></script>
+
+<!--Custom script goes here-->
+ <script type="text/javascript">
+ var DWObject;
+ function AcquireImage(){
+ 
+ DWObject = Dynamsoft.WebTwainEnv.GetWebTwain('dwtcontrolContainer');
+  //DWObject.ShowImageEditor();
+ 
+ 
+ DWObject.IfShowUI = false;
+ //DWObject.SelectSource();
+ DWObject.OpenSource();
+ DWObject.AcquireImage();
+ }
+ 
+ function RotateLeft() {
+    if (DWObject)
+        if (DWObject.HowManyImagesInBuffer > 0)
+            DWObject.RotateLeft(DWObject.CurrentImageIndexInBuffer);
+}
+function RotateRight() {
+    if (DWObject)
+        if (DWObject.HowManyImagesInBuffer > 0)
+            DWObject.RotateRight(DWObject.CurrentImageIndexInBuffer);
+}
+ 
+function OnSuccess() {
+    console.log('successful');
+}
+function OnFailure(errorCode, errorString) {            
+    alert(errorString);
+} 
+ function btn_SaveOnClick() {
+    if (DWObject.HowManyImagesInBuffer == 0){
+        alert("No images in buffer.");
+        return;                
+    }
+   DWObject.IfShowFileDialog=false;   
+   DWObject.SaveAsPDF("D:\\dynmscan\\test777.pdf", 0, OnSuccess, OnFailure);
+}
+ 
+ 
+ </script> 
+
+<script type="text/javascript" src="Resources/dynamsoft.webtwain.config.js"></script>
+
+
+
+</body>
+</html>

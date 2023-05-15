@@ -1,0 +1,142 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+  
+    
+ <script type="text/javascript">
+     
+     
+ var DWObject;
+ function AcquireImage(){
+ 
+ DWObject = Dynamsoft.WebTwainEnv.GetWebTwain('dwtcontrolContainer');
+  //DWObject.ShowImageEditor();
+ 
+ 
+ DWObject.IfShowUI = false;
+ //DWObject.SelectSource();
+ DWObject.OpenSource();
+ DWObject.AcquireImage();
+ }
+ 
+ function RotateLeft() {
+    if (DWObject)
+        if (DWObject.HowManyImagesInBuffer > 0)
+            DWObject.RotateLeft(DWObject.CurrentImageIndexInBuffer);
+}
+function RotateRight() {
+    if (DWObject)
+        if (DWObject.HowManyImagesInBuffer > 0)
+            DWObject.RotateRight(DWObject.CurrentImageIndexInBuffer);
+}
+ 
+function OnSuccess() {
+    console.log('successful');
+}
+function OnFailure(errorCode, errorString) {            
+    alert(errorString);
+} 
+ function btn_SaveOnClick() {
+    if (DWObject.HowManyImagesInBuffer == 0){
+        alert("No images in buffer.");
+        return;                
+    }
+   DWObject.IfShowFileDialog=false;   
+   DWObject.SaveAsPDF("D:\\dynmscan\\test5555.pdf", 0, OnSuccess, OnFailure);
+}
+ 
+ function SaveToAlfresco() {
+     if (DWObject) {
+         if (DWObject.HowManyImagesInBuffer > 0) {
+         	
+         	
+         	
+         	var uploadfilename="testDynm";
+         	 var strHTTPServer ="127.0.0.1"; //Server Name;
+         	 
+         	 
+         	 var CurrentPathName = unescape(location.pathname);
+             // var CurrentPath = CurrentPathName.substring(0, CurrentPathName.lastIndexOf("/") + 1);
+         	DWObject.HTTPPort = "8080";
+         	// var strActionPage ="alfresco/api/default/public/alfresco/versions/1/nodes/TestFolder2";
+         	 //var strActionPage ="/alfresco/upload/workspace/SpacesStore/TestFolder2/";
+         	 //var strActionPage ="/alfresco/service/cmis";
+         	var strActionPage = "/alfresco/webdav/TestFolder";
+         	DWObject.username= "admin",
+         	DWObject.password= "admin",
+         	
+         	 DWObject.HTTPUploadAllThroughPostAsPDF(strHTTPServer, strActionPage, uploadfilename + ".pdf", OnSuccess, OnFailure); 
+             /* DWObject.IfShowFileDialog = true;
+             if (document.getElementById("imgTypejpeg").checked == true) {
+                 
+                 if (DWObject.GetImageBitDepth(DWObject.CurrentImageIndexInBuffer) == 1)
+                    
+                     DWObject.ConvertToGrayScale(DWObject.CurrentImageIndexInBuffer);
+                 
+                 DWObject.SaveAsJPEG("DynamicWebTWAIN.jpg", DWObject.CurrentImageIndexInBuffer);
+             }
+             else if (document.getElementById("imgTypetiff").checked == true)
+                 DWObject.SaveAllAsMultiPageTIFF("DynamicWebTWAIN.tiff", OnSuccess, OnFailure);
+             else if (document.getElementById("imgTypepdf").checked == true) {
+             
+                 DWObject.HTTPUploadAllThroughPostAsPDF(strHTTPServer, strActionPage, uploadfilename + ".pdf", OnHttpUploadSuccess, OnHttpUploadFailure);
+             } */
+                
+         }
+     }
+ }
+ 
+ 
+ function SaveWithFileDialog() {
+     if (DWObject) {
+         if (DWObject.HowManyImagesInBuffer > 0) {
+         	
+         	
+         	var uploadfilename="123456";
+         	 var strHTTPServer ="localhost"; //Server Name;
+         	 var CurrentPathName = unescape(location.pathname);
+              var CurrentPath = CurrentPathName.substring(0, CurrentPathName.lastIndexOf("/") + 1);
+         	// DWObject.HTTPPort = location.port == "" ? 80 : location.port;
+                 DWObject.HTTPPort = "8080";
+         	 //var strActionPage =CurrentPath +"/TestFolder?FileName="+uploadfilename;
+               var strActionPage ="/alfresco/webdav/TestFolder/"+uploadfilename;
+                 DWObject.HTTPUploadAllThroughPostAsPDF(strHTTPServer, strActionPage, uploadfilename + ".pdf", OnSuccess, OnFailure);
+           
+                
+         }
+     }
+ }
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ </script> 
+
+
+</h:head>
+<body>
+
+ <script type="text/javascript" src="Resources/dynamsoft.webtwain.initiate.js"></script>
+<script type="text/javascript" src="Resources/dynamsoft.webtwain.config.js"></script>
+
+ <h:form id="docform" enctype="multipart/form-data">
+<div id="dwtcontrolContainer"></div>
+		<input type="button" value="Acquire" onclick="AcquireImage();" />
+<input type="button" value="RotateLeft" onclick="RotateLeft();" />
+<input type="button" value="RotateRight" onclick="RotateRight();" />
+
+<input type="button" value="Save" onclick="SaveWithFileDialog();" />
+	</h:form>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <h:head>
+        <title>#{iO_Bundle_ar.BillInfo}</title>
+        <h:outputStylesheet library="css" name="style_1.css"/>
+        <h:outputScript library="scripts" name="index.js"/>
+    </h:head>
+
+    <h:body>
+        <h:form id="DocDetailsForm" >
+
+            <h:panelGrid columns="2" cellpadding="10" style="vertical-align: top; width: 100%; height: 100%;">
+                <p:column style="width: 30%;">
+                    <h:panelGrid id="propsGrid" columns="1" cellpadding="10" style="width: 100%">
+                        <p:outputLabel value="DropDown:" for="custTypeId" />
+                        <p:selectOneMenu id="custTypeId" value="#{docDetailsController.selectedCTID}"  filter="true" filterMatchMode="contains">
+                            <f:ajax  event="change" listener="#{docDetailsController.onModelChange}"  render="pggrid"  />        
+
+                            <f:selectItem itemLabel="#{bundle.SelectOneMessage}"/>
+                            <f:selectItems value="#{docDetailsController.customTypeLst}"
+                                           var="customTypeItem"
+                                           itemValue="#{customTypeItem.customTypeId}"
+                                           itemLabel="#{customTypeItem.customTypeDesc}"
+                                           />
+                        </p:selectOneMenu>
+
+                        <p:panelGrid id="pggrid" columns="2"  style="width: 100%">
+
+                        </p:panelGrid> 
+                    </h:panelGrid>
+                </p:column>
+
+                <p:column style="width: 100%;">
+                    <p:media value="#{docDetailsController.streamedContent}" width="100%" height="300px" player="#{docDetailsController.player}">
+                    </p:media>
+                </p:column>
+            </h:panelGrid>
+
+            <p:spacer width="1px"></p:spacer>
+
+            <p:commandButton value="#{iO_Bundle.Close}" actionListener="#{docDetailsController.closeWindow}" />
+        </h:form>
+    </h:body>
+</html>
+
+
+
+

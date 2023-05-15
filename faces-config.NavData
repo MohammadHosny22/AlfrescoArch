@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Scene Scope="Project" version="2">
+    <Scope Scope="Faces Configuration Only"/>
+    <Scope Scope="Project">
+        <Node id="login.xhtml" x="1650" y="450" zoom="true"/>
+        <Node id="com/tech/arch/home/footerDock.xhtml" x="1650" y="1200" zoom="true"/>
+        <Node id="com/tech/arch/home/template.xhtml" x="2150" y="150" zoom="true"/>
+    </Scope>
+    <Scope Scope="All Faces Configurations"/>
+</Scene>

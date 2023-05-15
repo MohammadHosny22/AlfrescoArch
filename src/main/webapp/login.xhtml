@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"  
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:head>
+        <title>#{bundle.ArchivingSystem}</title>
+        <h:outputStylesheet library="css" name="style.css"/>
+        <h:outputStylesheet library="css" name="login.css"/>
+        <h:outputScript library="scripts" name="jquery.min.js"/>
+        <h:outputScript library="scripts" name="index.js"/>
+        <h:outputScript library="scripts" name="wow.js"/>
+        
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    </h:head>
+    <h:body>
+        <h:form id="loginForm">
+            <p:growl id="msg" showDetail="true" life="3000" />
+            <canvas id="canvas"></canvas>
+            <div id="login-box"><img class="profile" src="Resources/images/dribbble.jpg" style="width: 100px; height: 100px;" alt="User"/>
+                <h2>Log in here</h2>
+                <p>User Name</p>
+                <p:inputText id="username" value="#{loginController.username}" placeholder="#{bundle.CreateBillsTitle_username}" style="font-size: 22px;"></p:inputText>
+                <p>Password</p>
+                <p:password id="password" value="#{loginController.password}"  feedback="false" placeholder="**********" style="font-size: 25px; font-weight: bolder"></p:password>
+                <p:commandButton action="#{loginController.loginProject}" value="#{bundle.Login}" update="loginForm" ajax="true"></p:commandButton>
+                <br></br><br></br>
+                <a href="#">#{bundle.ForgetPassword}</a>
+                <p:growl id="growl" sticky="false" showDetail="true" life="3000" />
+            </div>
+        </h:form>
+    </h:body>
+</html>
